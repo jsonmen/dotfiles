@@ -9,6 +9,11 @@
   imports = [
     ../../modules/home/zsh.nix
     ../../modules/home/tmux.nix
+    ../../modules/home/hyprland.nix
+    ../../modules/home/waybar.nix
+    ../../modules/home/mako.nix
+    ../../modules/home/rofi.nix
+    ../../modules/home/neovim.nix
   ];
 
   home.packages = [ ]; 

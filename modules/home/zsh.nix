@@ -25,4 +25,10 @@
       [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
     '';
   };
+
+  # Native Home Manager Zoxide configuration
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;  
+  };
 }

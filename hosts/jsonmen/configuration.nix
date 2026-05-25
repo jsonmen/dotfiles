@@ -5,7 +5,10 @@
     ./hardware-configuration.nix 
   ];
 
-  # --- System & Boot ---
+  # =========================================================================
+  # === 1. SYSTEM, BOOT, & LOCALIZATION ====================================
+  # =========================================================================
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [ 
@@ -15,42 +18,32 @@
     ];
     loader = {
       systemd-boot.enable = true;
+      systemd-boot.configurationLimit = 10;
       efi.canTouchEfiVariables = true;
-      grub.configurationLimit = 10;
     };
   };
-  systemd.tmpfiles.rules = [
-    "L+ /sbin/ldconfig - - - - ${pkgs.writeShellScript "ldconfig-shim" ''
-      if [ "$1" = "-p" ]; then
-        echo "libcuda.so.1 (libc6,x86-64) => /run/opengl-driver/lib/libcuda.so.1"
-        exit 0
-      fi
-      exec ${pkgs.glibc.bin}/bin/ldconfig "$@"
-    ''}"
-  ];
-  services.gvfs.enable = true;
-  programs.adb.enable = true;
+
   networking.hostName = "jsonmen";
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Warsaw";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nixpkgs.config.allowUnfree = true;
+  # =========================================================================
+  # === 2. HARDWARE, DRIVERS, & AUDIO ======================================
+  # =========================================================================
 
-  # --- Hardware: Nvidia & Graphics ---
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics.enable = true;
   hardware.enableRedistributableFirmware = true;
+  
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = false;
     powerManagement.finegrained = false;
-    open = true; # Open-source kernel module for 20-series+
+    open = true; 
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # --- Hardware: Bluetooth & Audio ---
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -68,62 +61,37 @@
     pulse.enable = true;
   };
 
-  # --- Storage ---
   fileSystems."/hdd" = {
     device = "/dev/disk/by-uuid/f240e0a0-a55e-4bd2-b6fc-2b154f66a3c4";
     fsType = "ext4";
     options = [ "defaults" "nofail" ]; 
   };
 
-  # --- Environment Variables ---
-  environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-    NIXOS_OZONE_WL = "1";
-    LIBVA_DRIVER_NAME = "nvidia";
-    GBM_BACKEND = "nvidia-drm";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    XDG_SESSION_TYPE = "wayland";
-    SDL_VIDEODRIVER = "wayland";
-    DEFAULT_HEADPHONES_ADDRESS = "88:92:CC:86:A8:04";
-    MOZ_ENABLE_WAYLAND = "1";
-    GDK_BACKEND = "wayland";
-    GDK_DISABLE_WINDOW_HIDE = "1";
-  };
+  # =========================================================================
+  # === 3. DESKTOP & DISPLAY ENVIRONMENT ===================================
+  # =========================================================================
 
-  # --- User & Shell ---
-  users.users.jsonmen = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" "input" ];
-  };
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-      stdenv.cc.cc
-          zlib
-          fuse3
-          icu
-          nss
-          openssl
-          curl
-          expat
-          linuxPackages.nvidia_x11
-          cudaPackages.cuda_nvcc
-          cudaPackages.cuda_cudart
-          cudaPackages.libcublas
-          glibc
-  ];
-    # --- Home Manager Configuration ---
-  programs.zsh.enable = true;
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-
-  home-manager.users.jsonmen = import ./home.nix;
-
-  # --- Desktop Environment & UI ---
   programs.hyprland.enable = true;
-  services.displayManager.sddm = {
+  
+  # --- Light Weight Display Manager ---
+  services.greetd = {
     enable = true;
-    wayland.enable = true; 
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+        user = "greeter";
+      };
+    };
+  };
+
+  systemd.services.greetd.serviceConfig = {
+    Type = "idle";
+    StandardInput = "tty";
+    StandardOutput = "tty";
+    StandardError = "journal";
+    TTYReset = true;
+    TTYVHangup = true;
+    TTYVTDisallocate = true;
   };
 
   xdg.portal = {
@@ -132,6 +100,27 @@
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal-hyprland
     ];
+    config.common = {
+      default = [ "gtk" "hyprland" ];
+      "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+    };
+  };
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    XDG_SESSION_TYPE = "wayland";
+    SDL_VIDEODRIVER = "wayland";
+    MOZ_ENABLE_WAYLAND = "1";
+    GDK_BACKEND = "wayland";
+    
+    # Nvidia specific optimization hooks
+    WLR_NO_HARDWARE_CURSORS = "1";
+    LIBVA_DRIVER_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    
+    # Custom User Env variables
+    DEFAULT_HEADPHONES_ADDRESS = "88:92:CC:86:A8:04";
   };
 
   fonts = {
@@ -150,7 +139,54 @@
     };
   };
 
-  # --- System Tools & Maintenance ---
+  # =========================================================================
+  # === 4. USER ENVIRONMENT & NIX-LD =======================================
+  # =========================================================================
+
+  programs.zsh.enable = true;
+
+  users.users.jsonmen = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    extraGroups = [ "wheel" "networkmanager" "video" "audio" "input" ];
+  };
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.jsonmen = import ./home.nix;
+  };
+
+  # Native Dynamic Link Interceptor for pre-compiled external binaries
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc
+      zlib
+      fuse3
+      icu
+      nss
+      openssl
+      curl
+      expat
+      glibc
+      linuxPackages.nvidia_x11
+      cudaPackages.cuda_nvcc
+      cudaPackages.cuda_cudart
+      cudaPackages.libcublas
+    ];
+  };
+
+  # =========================================================================
+  # === 5. CORE SYSTEM UTILITIES & UTILS ===================================
+  # =========================================================================
+
+  services.gvfs.enable = true; 
+  programs.adb.enable = true;  
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+
   programs.nh = {
     enable = true;
     clean.enable = true;
@@ -158,7 +194,7 @@
     flake = "/home/jsonmen/dotfiles";
   };
 
-  # --- Packages ---
+  # Only system-wide requirements and base command line tools remain here
   environment.systemPackages = with pkgs; [
     # System & Terminal
     ghostty
@@ -190,17 +226,10 @@
     pavucontrol   
     kdePackages.kdenlive
 
-    # Development
-    python3
-    uv
-    black
-    rustc
-    cargo
-    rustfmt
-    clippy
+    # Dev (remove later)
     cudaPackages.cuda_nvcc
     cudaPackages.cuda_cudart
-  ];
+  ]; 
 
   system.stateVersion = "25.11";
 }

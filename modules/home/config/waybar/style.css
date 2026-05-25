@@ -1,0 +1,89 @@
+@import url("./coloring.css");
+
+* {
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: none;
+    border-radius: 0;
+    font-family: "JetBrainsMonoNL Nerd Font Propo";
+    font-size: 14px; /* Slightly smaller global font */
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+window#waybar {
+    background: alpha(@base, 0.2);
+    border-radius: 10px;
+}
+
+/* Perfect Circles for Workspaces */
+#workspaces button {
+    padding: 0;
+    margin: 2px;
+    min-width: 28px;  /* Shrunk from 36px */
+    min-height: 28px; /* Must match min-width */
+    background: alpha(@base, 0.8);
+    color: @text;
+    border-radius: 50%;
+    font-weight: 700;
+}
+
+#workspaces button.active {
+    background: @text;
+    color: @base;
+}
+
+/* Power & Bluetooth Icons */
+#custom-power,
+#custom-bth_button {
+    padding: 0;
+    margin: 0 3px;
+    min-width: 28px;
+    min-height: 28px;
+    background-color: @base;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+#custom-power { color: @blue; font-size: 20px; min-width: 32px}
+#custom-bth_button { color: @text; }
+#custom-bth_button.connected { color: @green; }
+
+/* FIXING CLOCK & AUDIO (The missing parts) */
+#clock,
+#pulseaudio {
+    padding: 0 10px;
+    background: @base;
+    color: @text;     /* This makes them visible again */
+    font-weight: 700;
+    border-radius: 8px;
+    margin: 2px 4px;
+}
+
+/* Tooltips */
+tooltip {
+    background: @base;
+    border-radius: 10px;
+}
+
+tooltip label {
+    color: @text;
+}
+
+#custom-bth_button.connected {
+  color: @green;
+}
+
+#custom-bth_button.disconnected {
+  color: @text;
+}
+
+#custom-bth_button.problem {
+  color: @red;
+}
+
+#custom-bth_button.connecting {
+  color: @yellow;
+}
