@@ -11,7 +11,7 @@
     nixosConfigurations.jsonmen = nixpkgs.lib.nixosSystem {
       modules = [
         { nix.settings.experimental-features = ["nix-command" "flakes"]; }
-        ./configuration.nix
+        ./hosts/jsonmen/configuration.nix
         home-manager.nixosModules.home-manager
       ];
     };

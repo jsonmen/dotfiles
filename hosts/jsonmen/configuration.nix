@@ -117,75 +117,7 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.users.jsonmen = { pkgs, ... }: {
-    home.stateVersion = "25.11";
-    programs.zsh = {
-        enable = true;
-        autosuggestion.enable = true;
-        syntaxHighlighting.enable = true;
-
-        oh-my-zsh = {
-          enable = true;
-          plugins = [ "git" "sudo" ];
-          theme = "";
-        };
-        plugins = [
-        {
-            name = "powerlevel10k";
-            src = pkgs.zsh-powerlevel10k;
-            file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-        }
-        ];
-        initContent = ''
-            eval "$(direnv hook zsh)"
-            [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-            '';
-    };
-    programs.tmux = {
-        enable = true;
-        clock24 = true;
-        baseIndex = 1;
-        keyMode = "vi";
-        shortcut = "a";
-        terminal = "tmux-256color";
-
-        plugins = with pkgs.tmuxPlugins; [
-          sensible
-          yank
-          {
-            plugin = catppuccin;
-            extraConfig = ''
-              set -g @catppuccin_flavour 'mocha'
-              set -g @catppuccin_window_status_style "basic"
-              set -g @catppuccin_window_text " #W"
-              set -g @catppuccin_window_current_text " #W"
-              set -g @catppuccin_window_current_number_color "#{@thm_mauve}"
-            '';
-          }
-        ];
-
-        extraConfig = ''
-          # --- Your Custom General Settings ---
-          setw -g pane-base-index 1
-          set -g renumber-windows on
-
-          # --- Navigation ---
-          bind -n C-h previous-window
-          bind -n C-l next-window
-
-          # --- Copy Mode Bindings ---
-          bind-key -T copy-mode-vi v send-keys -X begin-selection
-          bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
-          bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
-
-          # --- Status Bar ---
-          set -g status-left ""
-          set -g status-right '#[fg=#{@thm_text}] [#S]'
-        '';
-    };
-
-    programs.home-manager.enable = true;
-  };
+  home-manager.users.jsonmen = import ./home.nix;
 
   # --- Desktop Environment & UI ---
   programs.hyprland.enable = true;
@@ -223,7 +155,7 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 4d --keep 3";
-    flake = "/etc/nixos";
+    flake = "/home/jsonmen/dotfiles";
   };
 
   # --- Packages ---
