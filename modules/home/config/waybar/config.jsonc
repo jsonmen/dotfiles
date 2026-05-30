@@ -17,9 +17,9 @@
     "custom/bth_button": {
       "format": "{}",
       "return-type": "json",
-      "exec": "python3 ~/.config/waybar/scripts/btn_button_script.py",
+      "exec": "$HOME/dotfiles/modules/home/config/waybar/scripts/bt-btn-status-script",
       "interval": 1,
-      "on-click": "python3 ~/.config/waybar/scripts/btn_button_script.py --action-click"
+      "on-click": "$HOME/dotfiles/modules/home/config/waybar/scripts/bt-btn-status-script --action-click"
     },
     "clock": {
         "format": "{:%H:%M %a %d %b}",

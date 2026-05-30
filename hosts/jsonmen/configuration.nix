@@ -225,6 +225,7 @@
     audacity
     pavucontrol   
     kdePackages.kdenlive
+    gimp
 
     # Dev (remove later)
     cudaPackages.cuda_nvcc
