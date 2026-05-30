@@ -25,10 +25,10 @@
     ];
 
     extraConfig = ''
+      # --- Navigation ---
       setw -g pane-base-index 1
       set -g renumber-windows on
-
-      # --- Navigation ---
+      
       bind -n C-h previous-window
       bind -n C-l next-window
 
@@ -37,7 +37,7 @@
       bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
       bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
 
-      # --- Status Bar ---
+      # --- Status Bar Layout ---
       set -g status-left ""
       set -g status-right '#[fg=#{@thm_text}] [#S]'
     '';

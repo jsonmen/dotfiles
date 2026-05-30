@@ -15,6 +15,7 @@
     ../../modules/home/mako.nix
     ../../modules/home/rofi.nix
     ../../modules/home/neovim.nix
+    ../../modules/home/ghostty.nix
   ];
 
   home.packages = [ ]; 
