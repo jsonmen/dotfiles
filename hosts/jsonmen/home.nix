@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   home.username = "jsonmen";
@@ -7,6 +7,7 @@
 
   # --- Import Modules ---
   imports = [
+    inputs.nixvim.homeModules.nixvim
     ../../modules/home/zsh.nix
     ../../modules/home/tmux.nix
     ../../modules/home/hyprland.nix

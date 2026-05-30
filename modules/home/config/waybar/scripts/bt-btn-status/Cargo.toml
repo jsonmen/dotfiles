@@ -6,3 +6,10 @@ edition = "2024"
 [dependencies]
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
+
+[profile.release]
+opt-level = "z"     # Optimize aggressively for binary size
+lto = true          # Enable Link-Time Optimization across all dependencies
+codegen-units = 1   # Limit to 1 unit to allow max size optimizations
+panic = "abort"     # Remove stack-unwinding code (saves a lot of space)
+strip = true        # Automatically strip all symbols and debug info

@@ -18,8 +18,8 @@
       "format": "{}",
       "return-type": "json",
       "exec": "$HOME/dotfiles/modules/home/config/waybar/scripts/bt-btn-status-script",
-      "interval": 1,
-      "on-click": "$HOME/dotfiles/modules/home/config/waybar/scripts/bt-btn-status-script --action-click"
+      "on-click": "$HOME/dotfiles/modules/home/config/waybar/scripts/bt-btn-status-script --action-click",
+      "signal": 8
     },
     "clock": {
         "format": "{:%H:%M %a %d %b}",

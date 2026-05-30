@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [ 
@@ -78,7 +78,8 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+        # Prepending env COLORTERM=truecolor forces hex translation on the TTY line
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd start-hyprland";
         user = "greeter";
       };
     };
@@ -154,6 +155,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    extraSpecialArgs = { inherit inputs; };
     users.jsonmen = import ./home.nix;
   };
 
@@ -182,7 +184,6 @@
   # =========================================================================
 
   services.gvfs.enable = true; 
-  programs.adb.enable = true;  
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
@@ -198,7 +199,6 @@
   environment.systemPackages = with pkgs; [
     # System & Terminal
     ghostty
-    neovim
     git
     (btop.override { cudaSupport = true; })
     yazi
@@ -208,11 +208,12 @@
     home-manager
     direnv
     nix-direnv   
+    android-tools
 
     # Wayland / Hyprland Rice
     waybar
     mako
-    swww
+    swaybg
     rofi
     hyprshot
     catppuccin-cursors.mochaDark
@@ -226,10 +227,6 @@
     pavucontrol   
     kdePackages.kdenlive
     gimp
-
-    # Dev (remove later)
-    cudaPackages.cuda_nvcc
-    cudaPackages.cuda_cudart
   ]; 
 
   system.stateVersion = "25.11";

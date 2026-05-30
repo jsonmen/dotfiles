@@ -15,6 +15,7 @@
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
+    configType = "hyprlang";
 
     # Use important system environment variables generated dynamically by Nix
     importantPrefixes = [ "XCURSOR_" "HYPRCURSOR_" "LIBVA_" "GBM_" "NVD_" ];
