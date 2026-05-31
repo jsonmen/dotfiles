@@ -21,6 +21,10 @@
       # Match your pure text Neovim layout (ensures Nerd Fonts work out-of-the-box)
       font-family = "JetBrainsMono Nerd Font";
       font-size = 12;
+
+      window-padding-balance = true; # Centers the terminal grid to distribute fractional pixels evenly
+      window-padding-x = 6;          # Tightens horizontal padding boundaries
+      window-padding-y = 0;          # Tightens vertical padding boundaries
     };
   };
 }

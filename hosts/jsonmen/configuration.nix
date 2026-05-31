@@ -204,6 +204,7 @@
     yazi
     zoxide
     fzf
+    fd
     tmux
     home-manager
     direnv
@@ -227,6 +228,7 @@
     pavucontrol   
     kdePackages.kdenlive
     gimp
+    localsend
   ]; 
 
   system.stateVersion = "25.11";
