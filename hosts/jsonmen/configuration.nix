@@ -1,8 +1,13 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports = [ 
-    ./hardware-configuration.nix 
+  imports = [
+    ./hardware-configuration.nix
   ];
 
   # =========================================================================
@@ -11,7 +16,7 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [ 
+    kernelParams = [
       "nvidia-drm.modeset=1"
       "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
       "nvidia.NVreg_TemporaryFilePath=/var/tmp"
@@ -35,12 +40,12 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics.enable = true;
   hardware.enableRedistributableFirmware = true;
-  
+
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = false;
     powerManagement.finegrained = false;
-    open = true; 
+    open = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
@@ -64,7 +69,10 @@
   fileSystems."/hdd" = {
     device = "/dev/disk/by-uuid/f240e0a0-a55e-4bd2-b6fc-2b154f66a3c4";
     fsType = "ext4";
-    options = [ "defaults" "nofail" ]; 
+    options = [
+      "defaults"
+      "nofail"
+    ];
   };
 
   # =========================================================================
@@ -72,7 +80,7 @@
   # =========================================================================
 
   programs.hyprland.enable = true;
-  
+
   # --- Light Weight Display Manager ---
   services.greetd = {
     enable = true;
@@ -97,12 +105,15 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ 
+    extraPortals = [
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal-hyprland
     ];
     config.common = {
-      default = [ "gtk" "hyprland" ];
+      default = [
+        "gtk"
+        "hyprland"
+      ];
       "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
     };
   };
@@ -113,13 +124,13 @@
     SDL_VIDEODRIVER = "wayland";
     MOZ_ENABLE_WAYLAND = "1";
     GDK_BACKEND = "wayland";
-    
+
     # Nvidia specific optimization hooks
     WLR_NO_HARDWARE_CURSORS = "1";
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    
+
     # Custom User Env variables
     DEFAULT_HEADPHONES_ADDRESS = "88:92:CC:86:A8:04";
   };
@@ -133,9 +144,21 @@
       nerd-fonts.jetbrains-mono
     ];
     fontconfig.defaultFonts = {
-      serif = [ "Inter" "Noto Serif" "Noto Color Emoji" ];
-      sansSerif = [ "Inter" "Noto Sans" "Noto Color Emoji" ];
-      monospace = [ "Geist Mono" "JetBrains Mono" "Noto Color Emoji" ];
+      serif = [
+        "Inter"
+        "Noto Serif"
+        "Noto Color Emoji"
+      ];
+      sansSerif = [
+        "Inter"
+        "Noto Sans"
+        "Noto Color Emoji"
+      ];
+      monospace = [
+        "Geist Mono"
+        "JetBrains Mono"
+        "Noto Color Emoji"
+      ];
       emoji = [ "Noto Color Emoji" ];
     };
   };
@@ -143,13 +166,22 @@
   # =========================================================================
   # === 4. USER ENVIRONMENT & NIX-LD =======================================
   # =========================================================================
-
+  nix.settings.trusted-users = [
+    "root"
+    "jsonmen"
+  ];
   programs.zsh.enable = true;
 
   users.users.jsonmen = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" "input" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+      "audio"
+      "input"
+    ];
   };
 
   home-manager = {
@@ -183,9 +215,12 @@
   # === 5. CORE SYSTEM UTILITIES & UTILS ===================================
   # =========================================================================
 
-  services.gvfs.enable = true; 
+  services.gvfs.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nixpkgs.config.allowUnfree = true;
 
   programs.nh = {
@@ -208,7 +243,7 @@
     tmux
     home-manager
     direnv
-    nix-direnv   
+    nix-direnv
     android-tools
 
     # Wayland / Hyprland Rice
@@ -225,11 +260,11 @@
     obs-studio
     mpv
     audacity
-    pavucontrol   
+    pavucontrol
     kdePackages.kdenlive
     gimp
     localsend
-  ]; 
+  ];
 
   system.stateVersion = "25.11";
 }

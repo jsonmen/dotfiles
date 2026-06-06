@@ -1,12 +1,12 @@
 { pkgs, ... }:
-
+# TODO: FIX bluetooth watcher
 let
   bt-watcher = pkgs.writeShellScriptBin "bt-watcher" ''
     export PATH="${pkgs.coreutils}/bin:${pkgs.systemd}/bin:${pkgs.procps}/bin:$PATH"
-    
+
     # Ensure any old lock directories are cleared on script initialization
     rm -rf /tmp/waybar_bt_lock
-    
+
     # Using udevadm monitor as user requires access to the systemd sockets
     stdbuf -oL udevadm monitor --subsystem-match=bluetooth | while read -r line; do
         if mkdir /tmp/waybar_bt_lock 2>/dev/null; then

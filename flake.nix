@@ -14,7 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs = { nixpkgs, nixvim, home-manager, ... }@inputs: {
   nixosConfigurations.jsonmen = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";

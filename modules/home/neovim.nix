@@ -15,6 +15,7 @@
       lazygit
       fzf
       fd
+      nixfmt
     ];
 
     # =========================================================================
@@ -290,6 +291,19 @@
           };
           pyright = {
             enable = true;
+            settings = {
+              python = {
+                # Force Pyright to read the Python binary from your active environment (such as uv's .venv)
+                pythonPath = "./.venv/bin/python";
+                analysis = {
+                  # Directs Pyright to look for third-party packages inside the local virtual environment
+                  venvPath = ".";
+                  venv = ".venv";
+                  autoSearchPaths = true;
+                  useLibraryCodeForTypes = true;
+                };
+              };
+            };
           };
           nixd = {
             enable = true;

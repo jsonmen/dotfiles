@@ -1,7 +1,7 @@
+use serde::Serialize;
 use std::env;
 use std::process::{Command, Stdio};
-use serde::Serialize;
-
+//TODO: Battery %
 #[derive(Serialize)]
 struct WaybarOutput {
     text: String,
@@ -19,7 +19,8 @@ fn is_connected(mac: &str) -> bool {
 }
 
 fn main() {
-    let mac = env::var("DEFAULT_HEADPHONES_ADDRESS").unwrap_or_else(|_| String::from("XX:XX:XX:XX:XX:XX"));
+    let mac = env::var("DEFAULT_HEADPHONES_ADDRESS")
+        .unwrap_or_else(|_| String::from("XX:XX:XX:XX:XX:XX"));
     let args: Vec<String> = env::args().collect();
 
     // --- ACTION: CLICK (FIRE AND FORGET) ---
@@ -27,7 +28,7 @@ fn main() {
         // Run connect asynchronously in the background via system shell and exit instantly
         let cmd = format!("bluetoothctl connect {} > /dev/null 2>&1 &", mac);
         let _ = Command::new("sh").args(["-c", &cmd]).spawn();
-        
+
         // Output temporary feedback to Waybar immediately
         let click_output = WaybarOutput {
             text: String::from("󰋋"),
