@@ -1,6 +1,7 @@
 # My dotfiles
-
 These are my dotfiles for NixOS, btw.
+
+![Hyprland, btw.](assests/img2.png)
 
 If you want to get this running on your own hardware—which is a very brave move—you need to remove the disk mount from `configuration.nix` because you won't boot with it (honestly, I don't really know what will happen if you try). You also need to change `DEFAULT_HEADPHONES_ADDRESS` if you really want the full immersive experience.
 
@@ -17,6 +18,8 @@ Now, for the more interesting part: how I (or you, if you install this) can flex
 10. I use Hyprland, btw.
 11. Did I mention I use NixOS, btw?
 12. You should really move away from Arch and get some real dev experience.
+
+![Neovim, btw.](assests/img1.png)
 
 So, what is the protocol for using these phrases? When someone explicitly asks for your stack, just send them your `environment.systemPackages` (or a link to your dotfiles repo). But if you see someone talking about Arch, another distro, or some other software they think is better, you drop the response.
 
