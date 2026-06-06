@@ -19,7 +19,7 @@ Now, for the more interesting part: how I (or you, if you install this) can flex
 11. Did I mention I use NixOS, btw?
 12. You should really move away from Arch and get some real dev experience.
 
-![Neovim, btw.](assets/img1.png)
+![Neovim, btw.](assets/img1.jpg)
 
 So, what is the protocol for using these phrases? When someone explicitly asks for your stack, just send them your `environment.systemPackages` (or a link to your dotfiles repo). But if you see someone talking about Arch, another distro, or some other software they think is better, you drop the response.
 
