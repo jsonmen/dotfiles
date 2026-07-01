@@ -18,14 +18,21 @@
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "nvidia-drm.modeset=1"
-      "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
       "nvidia.NVreg_TemporaryFilePath=/var/tmp"
     ];
     loader = {
-      systemd-boot.enable = true;
-      systemd-boot.configurationLimit = 10;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 10;
+      };
       efi.canTouchEfiVariables = true;
     };
+    initrd.kernelModules = [
+      "nvidia"
+      "nvidia_modeset"
+      "nvidia_uvm"
+      "nvidia_drm"
+    ];
   };
 
   networking.hostName = "jsonmen";
@@ -38,14 +45,17 @@
   # =========================================================================
 
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
   hardware.enableRedistributableFirmware = true;
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
+    powerManagement.enable = true;
     powerManagement.finegrained = false;
-    open = true;
+    open = false;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
@@ -191,26 +201,6 @@
     users.jsonmen = import ./home.nix;
   };
 
-  # Native Dynamic Link Interceptor for pre-compiled external binaries
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      stdenv.cc.cc
-      zlib
-      fuse3
-      icu
-      nss
-      openssl
-      curl
-      expat
-      glibc
-      linuxPackages.nvidia_x11
-      cudaPackages.cuda_nvcc
-      cudaPackages.cuda_cudart
-      cudaPackages.libcublas
-    ];
-  };
-
   # =========================================================================
   # === 5. CORE SYSTEM UTILITIES & UTILS ===================================
   # =========================================================================
@@ -226,10 +216,15 @@
   programs.nh = {
     enable = true;
     clean.enable = true;
-    clean.extraArgs = "--keep-since 4d --keep 3";
+    clean.extraArgs = "--keep-since 30d --keep 3";
     flake = "/home/jsonmen/dotfiles";
   };
-
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
   # Only system-wide requirements and base command line tools remain here
   environment.systemPackages = with pkgs; [
     # System & Terminal
@@ -253,6 +248,7 @@
     rofi
     hyprshot
     catppuccin-cursors.mochaDark
+    wl-clipboard
 
     # Apps
     librewolf

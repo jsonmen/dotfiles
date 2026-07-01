@@ -8,24 +8,34 @@
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "sudo" ];
-      theme = ""; 
+      plugins = [
+        "git"
+        "sudo"
+      ];
+      theme = "";
     };
 
-    plugins = [];
+    plugins = [ ];
 
     initContent = lib.mkAfter ''
       eval "$(direnv hook zsh)"
     '';
   };
-
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    
+
     settings = {
       add_newline = false;
-      
+
       format = "$nix_shell$directory$git_branch$git_status\n$character";
       right_format = "$cmd_duration";
 
@@ -33,7 +43,7 @@
 
       nix_shell = {
         symbol = " ";
-        format = "[ $symbol]($style)"; 
+        format = "[ $symbol]($style)";
         style = "fg:#89b4fa";
         impure_msg = "";
         pure_msg = "";
@@ -45,7 +55,7 @@
         # Using a folder icon and cyan path text over a dark blue background (#005f87)
         format = "[  $path ]($style)";
         style = "fg:#b4befe bold";
-        truncation_length = 99; 
+        truncation_length = 99;
         truncate_to_repo = false;
         fish_style_pwd_dir_length = 0;
       };
@@ -77,8 +87,4 @@
     };
   };
 
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;  
-  };
 }

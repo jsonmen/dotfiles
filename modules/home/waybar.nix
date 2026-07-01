@@ -1,5 +1,4 @@
 { pkgs, ... }:
-# TODO: FIX bluetooth watcher
 let
   bt-watcher = pkgs.writeShellScriptBin "bt-watcher" ''
     export PATH="${pkgs.coreutils}/bin:${pkgs.systemd}/bin:${pkgs.procps}/bin:$PATH"
@@ -33,8 +32,8 @@ in
   systemd.user.services.bt-watcher = {
     Unit = {
       Description = "Bluetooth Event Watcher for Waybar";
-      After = [ "hm-graphical-session.target" ];
-      PartOf = [ "hm-graphical-session.target" ];
+      After = [ "bluetooth.target" ];
+      PartOf = [ "bluetooth.target" ];
     };
 
     Service = {
@@ -42,9 +41,8 @@ in
       Restart = "on-failure";
       RestartSec = 2;
     };
-
     Install = {
-      WantedBy = [ "hm-graphical-session.target" ];
+      WantedBy = [ "bluetooth.target" ];
     };
   };
 }

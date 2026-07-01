@@ -45,9 +45,45 @@
     # 2. Keymaps
     # =========================================================================
     keymaps = [
-      { mode = "i"; key = "jj"; action = "<Esc>"; }
-      { mode = "v"; key = "<"; action = "<gv"; }
-      { mode = "v"; key = ">"; action = ">gv"; }
+      {
+        mode = "i";
+        key = "jj";
+        action = "<Esc>";
+      }
+      {
+        mode = "v";
+        key = "<";
+        action = "<gv";
+      }
+      {
+        mode = "v";
+        key = ">";
+        action = ">gv";
+      }
+      # --- Delete without changing clipboard ---
+      {
+        mode = [
+          "n"
+          "v"
+        ];
+        key = "<leader>o";
+        action = "\"_d";
+        options = {
+          desc = "Delete to black hole register (no clipboard)";
+          silent = true;
+        };
+      }
+
+      # --- Paste without changing clipboard ---
+      {
+        mode = "x";
+        key = "<leader>p";
+        action = "\"_dP";
+        options = {
+          desc = "Paste over selection without changing clipboard";
+          silent = true;
+        };
+      }
 
       # --- Telescope Keymaps ---
       {
@@ -62,10 +98,10 @@
         action = "<cmd>Telescope live_grep<CR>";
         options.desc = "Telescope Live Grep (Search Text)";
       }
-      { 
-        mode = "n"; 
-        key = "<leader>fd"; 
-        action = "<cmd>Telescope diagnostics<CR>"; 
+      {
+        mode = "n";
+        key = "<leader>fd";
+        action = "<cmd>Telescope diagnostics<CR>";
         options.desc = "Telescope Find Workspace Diagnostics";
       }
       {
@@ -79,13 +115,17 @@
       {
         mode = "n";
         key = "<leader>a";
-        action = { __raw = "function() require('harpoon'):list():add() end"; };
+        action = {
+          __raw = "function() require('harpoon'):list():add() end";
+        };
         options.desc = "Harpoon: Append file to list";
       }
       {
         mode = "n";
         key = "<leader>h";
-        action = { __raw = "function() local harpoon = require('harpoon') harpoon.ui:toggle_quick_menu(harpoon:list()) end"; };
+        action = {
+          __raw = "function() local harpoon = require('harpoon') harpoon.ui:toggle_quick_menu(harpoon:list()) end";
+        };
         options.desc = "Harpoon: Toggle quick menu GUI";
       }
 
@@ -93,25 +133,33 @@
       {
         mode = "n";
         key = "<leader>k";
-        action = { __raw = "function() require('harpoon'):list():select(1) end"; };
+        action = {
+          __raw = "function() require('harpoon'):list():select(1) end";
+        };
         options.desc = "Harpoon: Jump to Slot 1";
       }
       {
         mode = "n";
         key = "<leader>i";
-        action = { __raw = "function() require('harpoon'):list():select(2) end"; };
+        action = {
+          __raw = "function() require('harpoon'):list():select(2) end";
+        };
         options.desc = "Harpoon: Jump to Slot 2";
       }
       {
         mode = "n";
         key = "<leader>d";
-        action = { __raw = "function() require('harpoon'):list():select(3) end"; };
+        action = {
+          __raw = "function() require('harpoon'):list():select(3) end";
+        };
         options.desc = "Harpoon: Jump to Slot 3";
       }
       {
         mode = "n";
         key = "<leader>e";
-        action = { __raw = "function() require('harpoon'):list():select(4) end"; };
+        action = {
+          __raw = "function() require('harpoon'):list():select(4) end";
+        };
         options.desc = "Harpoon: Jump to Slot 4";
       }
 
@@ -124,14 +172,54 @@
       }
 
       # --- Global LSP Controls ---
-      { mode = "n"; key = "K"; action = "<cmd>lua vim.lsp.buf.hover()<CR>"; options.desc = "LSP Hover Documentation"; }
-      { mode = "n"; key = "gd"; action = "<cmd>lua vim.lsp.buf.definition()<CR>"; options.desc = "LSP Go to Definition"; }
-      { mode = "n"; key = "gD"; action = "<cmd>lua vim.lsp.buf.declaration()<CR>"; options.desc = "LSP Go to Declaration"; }
-      { mode = "n"; key = "gi"; action = "<cmd>lua vim.lsp.buf.implementation()<CR>"; options.desc = "LSP Go to Implementation"; }
-      { mode = "n"; key = "<leader>rn"; action = "<cmd>lua vim.lsp.buf.rename()<CR>"; options.desc = "LSP Rename Variable"; }
-      { mode = "n"; key = "<leader>ca"; action = "<cmd>lua vim.lsp.buf.code_action()<CR>"; options.desc = "LSP Code Action"; }
-      { mode = "n"; key = "[d"; action = "<cmd>lua vim.diagnostic.goto_prev()<CR>"; options.desc = "Next Diagnostic Error"; }
-      { mode = "n"; key = "]d"; action = "<cmd>lua vim.diagnostic.goto_next()<CR>"; options.desc = "Previous Diagnostic Error"; }
+      {
+        mode = "n";
+        key = "K";
+        action = "<cmd>lua vim.lsp.buf.hover()<CR>";
+        options.desc = "LSP Hover Documentation";
+      }
+      {
+        mode = "n";
+        key = "gd";
+        action = "<cmd>lua vim.lsp.buf.definition()<CR>";
+        options.desc = "LSP Go to Definition";
+      }
+      {
+        mode = "n";
+        key = "gD";
+        action = "<cmd>lua vim.lsp.buf.declaration()<CR>";
+        options.desc = "LSP Go to Declaration";
+      }
+      {
+        mode = "n";
+        key = "gi";
+        action = "<cmd>lua vim.lsp.buf.implementation()<CR>";
+        options.desc = "LSP Go to Implementation";
+      }
+      {
+        mode = "n";
+        key = "<leader>rn";
+        action = "<cmd>lua vim.lsp.buf.rename()<CR>";
+        options.desc = "LSP Rename Variable";
+      }
+      {
+        mode = "n";
+        key = "<leader>ca";
+        action = "<cmd>lua vim.lsp.buf.code_action()<CR>";
+        options.desc = "LSP Code Action";
+      }
+      {
+        mode = "n";
+        key = "[d";
+        action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
+        options.desc = "Next Diagnostic Error";
+      }
+      {
+        mode = "n";
+        key = "]d";
+        action = "<cmd>lua vim.diagnostic.goto_next()<CR>";
+        options.desc = "Previous Diagnostic Error";
+      }
     ];
 
     autoCmd = [
@@ -167,7 +255,18 @@
       treesitter = {
         enable = true;
         settings = {
-          ensure_installed = [ "lua" "vim" "vimdoc" "query" "python" "bash" "rust" "toml" "json" "markdown" ];
+          ensure_installed = [
+            "lua"
+            "vim"
+            "vimdoc"
+            "query"
+            "python"
+            "bash"
+            "rust"
+            "toml"
+            "json"
+            "markdown"
+          ];
           highlight.enable = true;
           indent.enable = true;
         };
@@ -191,26 +290,26 @@
 
       telescope = {
         enable = true;
+        fileIgnorePatterns = [
+          "^%.git/"
+          "^node_modules/"
+          "^result/"
+          "%.o$"
+          "%.pyc$"
+          "^target/"
+        ];
+        vimgrepArguments = [
+          "${pkgs.ripgrep}/bin/rg"
+          "--color=never"
+          "--no-heading"
+          "--with-filename"
+          "--line-number"
+          "--column"
+          "--smart-case"
+          "--hidden"
+        ];
         settings = {
           defaults = {
-            file_ignore_patterns = [
-              "^%.git/"
-              "^node_modules/"
-              "^result/" 
-              "%.o$"
-              "%.pyc$"
-              "^target/"
-            ];
-            vimgrep_arguments = [
-              "${pkgs.ripgrep}/bin/rg"
-              "--color=never"
-              "--no-heading"
-              "--with-filename"
-              "--line-number"
-              "--column"
-              "--smart-case"
-              "--hidden"
-            ];
             mappings = {
               i = {
                 "<C-y>" = {
@@ -257,9 +356,13 @@
         };
       };
 
+      gitsigns = {
+        enable = true;
+        settings = { };
+      };
       harpoon = {
         enable = true;
-        enableTelescope = false; 
+        enableTelescope = false;
       };
 
       oil = {
